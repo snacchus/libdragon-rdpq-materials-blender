@@ -8,6 +8,9 @@ bl_info = {
     "blender": (3, 2, 0),
 }
 
+# bl_info docs:
+# https://projects.blender.org/blender/blender-developer-docs/src/commit/69734d611d9c90fe51146e76b10b0f36bbcb7214/docs/handbook/addons/addon_meta_info.md
+
 import bpy
 import bpy.utils
 
