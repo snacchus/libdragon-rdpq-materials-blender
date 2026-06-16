@@ -5,7 +5,6 @@ import bpy
 from . import rdpq_material_props
 from . import util
 
-
 COMBINER_MUXES_MKMATERIAL_MAP = {
     "COMBINED": "combined",
     "COMBINED_ALPHA": "combined.a",
@@ -36,6 +35,7 @@ def rdpq_material_properties_to_dict(
     mat_rdpq: rdpq_material_props.RDPQMaterialProperties,
 ):
     mat_data = {}
+    mat_textures: dict[int, bpy.types.Image] = {}
 
     def handle_texture_axis(
         tex_i: int,
@@ -64,8 +64,7 @@ def rdpq_material_properties_to_dict(
             # mat_data[f"tex{tex_i}.placeholder"] = str(texture_props.placeholder)
         else:
             if texture_props.image is not None:
-                # TODO the image name is not the right thing to use here
-                mat_data[f"tex{tex_i}.name"] = texture_props.image.name
+                mat_textures[tex_i] = texture_props.image
             mat_data.update(
                 {
                     f"tex{tex_i}.fmt": texture_props.format,
@@ -202,7 +201,7 @@ def rdpq_material_properties_to_dict(
             mat_rdpq.override_render_mode.fixed_z_deltaz
         )
 
-    return mat_data
+    return mat_data, mat_textures
 
 
 class RDPQMaterialExportOperator(bpy.types.Operator):
@@ -220,7 +219,18 @@ class RDPQMaterialExportOperator(bpy.types.Operator):
         assert mat is not None
         mat_rdpq = util.LIBDRAGON_RDPQ(mat)
 
-        mat_data = rdpq_material_properties_to_dict(mat_rdpq)
+        mat_data, mat_textures = rdpq_material_properties_to_dict(mat_rdpq)
+
+        for i in (0, 1):
+            if i in mat_textures:
+                img = mat_textures[i]
+                saved_filepath = img.filepath
+                try:
+                    img.filepath = str(Path(self.out_file).parent / f"{img.name}.png")
+                    mat_data[f"tex{i}.name"] = img.filepath
+                    img.save()
+                finally:
+                    img.filepath = saved_filepath
 
         import json
 

@@ -4,7 +4,6 @@ import addon_utils
 from . import export_to_mkmaterial
 from . import util
 
-
 glTF2_addon_ver = None
 
 for mod in addon_utils.modules():  # type: ignore
@@ -179,29 +178,24 @@ class glTF2ExportUserExtension:
         blender_material: bpy.types.Material,
         export_settings,
     ):
-        jmat = export_to_mkmaterial.rdpq_material_properties_to_dict(
+        jmat, mat_textures = export_to_mkmaterial.rdpq_material_properties_to_dict(
             util.LIBDRAGON_RDPQ(blender_material)
         )
-        textures_workaround_data = {}
         for i in (0, 1):
-            if f"tex{i}.name" in jmat:
+            if i in mat_textures:
                 gathered_texture_info = export_standalone_image(
                     blender_material,
-                    bpy.data.images[jmat[f"tex{i}.name"]],
+                    mat_textures[i],
                     export_settings,
                 )
 
-                # I can't reproduce it but I had glTF rename the images once.
-                # In general this should just be the same name as the blender image / tex{i}.name
-                jmat[f"tex{i}.name"] = gathered_texture_info.index.source.name
-
-                # So that the gltf addon will actually export the texture
-                textures_workaround_data[f"tex{i}.texture"] = gathered_texture_info
+                # gathered_texture_info.index.source is a gltf2_io.Image
+                # Later on in the gltf export process, it will be picked up by the gltf
+                # exporter as "child of root" data and appended to the list of images
+                # in the gltf output.  Additionally texN.source will be set to the
+                # corresponding index in the images array.
+                jmat[f"tex{i}.source"] = gathered_texture_info.index.source
         gltf2_material.extensions[glTF_extension_name] = jmat
-        if textures_workaround_data:
-            gltf2_material.extensions[glTF_extension_name + "_textures_workaround"] = (
-                textures_workaround_data
-            )
 
 
 class glTFExtensionProperties(bpy.types.PropertyGroup):
