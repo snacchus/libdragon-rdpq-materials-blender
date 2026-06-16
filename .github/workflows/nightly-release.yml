@@ -18,7 +18,7 @@ jobs:
           GH_TOKEN: ${{ github.token }}
         continue-on-error: true  # In case the release doesn't exist yet
       - name: Checkout repo
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           path: libdragon_rdpq_materials
           fetch-depth: 0
@@ -34,7 +34,7 @@ jobs:
             echo "now=$(date +'%Y-%m-%d')" >> $GITHUB_OUTPUT
             echo "message=$(git -C libdragon_rdpq_materials log -1 --pretty=%s)" >> $GITHUB_OUTPUT
       - name: Create nightly release
-        uses: softprops/action-gh-release@v2
+        uses: softprops/action-gh-release@v3
         with:
           prerelease: true
           tag_name: nightly
