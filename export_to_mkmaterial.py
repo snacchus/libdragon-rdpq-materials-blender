@@ -139,6 +139,23 @@ def rdpq_material_properties_to_dict(
         }
     )
 
+    if mat_rdpq.registers.set_k4:
+        mat_data["combiner.reg.k4"] = str(mat_rdpq.registers.k4);
+    if mat_rdpq.registers.set_k5:
+        mat_data["combiner.reg.k5"] = str(mat_rdpq.registers.k5);
+    if mat_rdpq.registers.set_keyscale:
+        mat_data["combiner.reg.keyscale"] = str(mat_rdpq.registers.keyscale);
+    if mat_rdpq.registers.set_keycenter:
+        mat_data["combiner.reg.keycenter"] = str(mat_rdpq.registers.keycenter);
+    if mat_rdpq.registers.set_prim_lod_frac:
+        mat_data["combiner.reg.prim_lod_frac"] = str(mat_rdpq.registers.prim_lod_frac);
+    if mat_rdpq.registers.set_env_color:
+        e = mat_rdpq.registers.env_color
+        mat_data["combiner.reg.env"] = f"{e[0]},{e[1]},{e[2]},{e[3]}"
+    if mat_rdpq.registers.set_prim_color:
+        p = mat_rdpq.registers.prim_color
+        mat_data["combiner.reg.prim"] = f"{p[0]},{p[1]},{p[2]},{p[3]}"
+
     if mat_rdpq.blender.preset == "CUSTOM_1_PASS":
         raise NotImplementedError()
     elif mat_rdpq.blender.preset == "CUSTOM_2_PASSES":

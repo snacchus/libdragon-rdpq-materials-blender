@@ -411,6 +411,22 @@ class RDPQMaterialPanel(bpy.types.Panel):
             box.prop(mat_rdpq.combiner, "alpha_B_1")
             box.prop(mat_rdpq.combiner, "alpha_C_1")
             box.prop(mat_rdpq.combiner, "alpha_D_1")
+        
+        box = layout.box()
+        def prop_register(set_prop_name: str, prop_name: str):
+            row = box.row()
+            row.prop(mat_rdpq.registers, set_prop_name, text="")
+            col = row.column()
+            col.prop(mat_rdpq.registers, prop_name)
+            col.enabled = getattr(mat_rdpq.registers, set_prop_name)
+        
+        prop_register("set_k4", "k4")
+        prop_register("set_k5", "k5")
+        prop_register("set_keyscale", "keyscale")
+        prop_register("set_keycenter", "keycenter")
+        prop_register("set_prim_lod_frac", "prim_lod_frac")
+        prop_register("set_env_color", "env_color")
+        prop_register("set_prim_color", "prim_color")
 
         box = layout.box()
         prop_split(box, mat_rdpq.blender, "preset")
@@ -468,6 +484,7 @@ classes = (
     rdpq_material_props.RDPQMaterialTextureAxisProperties,
     rdpq_material_props.RDPQMaterialTextureProperties,
     rdpq_material_props.RDPQMaterialCombinerProperties,
+    rdpq_material_props.RDPQMaterialRegistersProperties,
     rdpq_material_props.RDPQMaterialBlenderProperties,
     rdpq_material_props.RDPQMaterialOverrideRenderModeProperties,
     rdpq_material_props.RDPQMaterialProperties,

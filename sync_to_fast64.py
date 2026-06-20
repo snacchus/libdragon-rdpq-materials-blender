@@ -264,6 +264,18 @@ def rdpq_material_props_to_fast64_props(
         mat_rdpq.combiner.alpha_D_1
     ]
 
+    # Registers
+
+    mat_fast64.set_k0_5 = mat_rdpq.registers.set_k4 or mat_rdpq.registers.set_k5
+    mat_fast64.k4 = mat_rdpq.registers.k4 if mat_rdpq.registers.set_k4 else 0
+    mat_fast64.k5 = mat_rdpq.registers.k5 if mat_rdpq.registers.set_k5 else 0
+    mat_fast64.set_prim = mat_rdpq.registers.set_prim_lod_frac or mat_rdpq.registers.set_prim_color
+    mat_fast64.prim_lod_frac = mat_rdpq.registers.prim_lod_frac if mat_rdpq.registers.set_prim_lod_frac else 0
+    mat_fast64.prim_color = mat_rdpq.registers.prim_color if mat_rdpq.registers.set_prim_color else (1, 1, 1, 1)
+    mat_fast64.set_env = mat_rdpq.registers.set_env_color
+    mat_fast64.env_color = mat_rdpq.registers.env_color
+    # TODO: key scale, key center
+
     # Blender
 
     # TODO handle one-cycle props

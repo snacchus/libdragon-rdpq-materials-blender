@@ -462,6 +462,102 @@ class RDPQMaterialCombinerProperties(bpy.types.PropertyGroup):
     )
 
 
+class RDPQMaterialRegistersProperties(bpy.types.PropertyGroup):
+    set_k4: bpy.props.BoolProperty(
+        name="Set K4",
+        description="",
+        default=False,
+    )
+    k4: bpy.props.FloatProperty(
+        name="K4",
+        description="",
+        default=0,
+        min=0,
+        max=1,
+        subtype="FACTOR",
+    )
+    set_k5: bpy.props.BoolProperty(
+        name="Set K5",
+        description="",
+        default=False,
+    )
+    k5: bpy.props.FloatProperty(
+        name="K5",
+        description="",
+        default=0,
+        min=0,
+        max=1,
+        subtype="FACTOR",
+    )
+    set_keyscale: bpy.props.BoolProperty(
+        name="Set Key Scale",
+        description="",
+        default=False,
+    )
+    keyscale: bpy.props.FloatProperty(
+        name="Key Scale",
+        description="",
+        default=0,
+        min=0,
+        max=1,
+        subtype="FACTOR",
+    )
+    set_keycenter: bpy.props.BoolProperty(
+        name="Set Key Center",
+        description="",
+        default=False,
+    )
+    keycenter: bpy.props.FloatProperty(
+        name="Key Center",
+        description="",
+        default=0,
+        min=0,
+        max=1,
+        subtype="FACTOR",
+    )
+    set_prim_lod_frac: bpy.props.BoolProperty(
+        name="Set Prim LOD Frac",
+        description="",
+        default=False,
+    )
+    prim_lod_frac: bpy.props.FloatProperty(
+        name="Prim LOD Frac",
+        description="",
+        default=0,
+        min=0,
+        max=1,
+        subtype="FACTOR",
+    )
+    set_env_color: bpy.props.BoolProperty(
+        name="Set Env Color",
+        description="",
+        default=False,
+    )
+    env_color: bpy.props.FloatVectorProperty(
+        name="Env Color",
+        description="",
+        default=(1, 1, 1, 1),
+        min=0,
+        max=1,
+        subtype="COLOR",
+        size=4,
+    )
+    set_prim_color: bpy.props.BoolProperty(
+        name="Set Prim Color",
+        description="",
+        default=False,
+    )
+    prim_color: bpy.props.FloatVectorProperty(
+        name="Prim Color",
+        description="",
+        default=(1, 1, 1, 1),
+        min=0,
+        max=1,
+        subtype="COLOR",
+        size=4,
+    )
+
+
 BLEND1_A_ITEMS = (
     ("IN_RGB", "IN_RGB", ""),
     ("MEMORY_RGB", "MEMORY_RGB", ""),
@@ -767,6 +863,7 @@ class RDPQMaterialProperties(bpy.types.PropertyGroup):
     texture0_: bpy.props.PointerProperty(type=RDPQMaterialTextureProperties)
     texture1_: bpy.props.PointerProperty(type=RDPQMaterialTextureProperties)
     combiner_: bpy.props.PointerProperty(type=RDPQMaterialCombinerProperties)
+    registers_: bpy.props.PointerProperty(type=RDPQMaterialRegistersProperties)
     blender_: bpy.props.PointerProperty(type=RDPQMaterialBlenderProperties)
     override_render_mode_: bpy.props.PointerProperty(
         type=RDPQMaterialOverrideRenderModeProperties
@@ -783,6 +880,10 @@ class RDPQMaterialProperties(bpy.types.PropertyGroup):
     @property
     def combiner(self) -> RDPQMaterialCombinerProperties:
         return self.combiner_
+
+    @property
+    def registers(self) -> RDPQMaterialRegistersProperties:
+        return self.registers_
 
     @property
     def blender(self) -> RDPQMaterialBlenderProperties:
@@ -861,6 +962,25 @@ LIBDRAGON_RDPQ_PROPS_LIST = RecursivePropsList(
                         "alpha_B_1",
                         "alpha_C_1",
                         "alpha_D_1",
+                    ),
+                    {},
+                ),
+                "registers": RecursivePropsList(
+                    (
+                        "set_k4",
+                        "k4",
+                        "set_k5",
+                        "k5",
+                        "set_keyscale",
+                        "keyscale",
+                        "set_keycenter",
+                        "keycenter",
+                        "set_prim_lod_frac",
+                        "prim_lod_frac",
+                        "set_env_color",
+                        "env_color",
+                        "set_prim_color",
+                        "prim_color",
                     ),
                     {},
                 ),
